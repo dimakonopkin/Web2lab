@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+   <title>Лаба №2</title><script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script> 
+    const connect = "http://localhost:3000/search/";
+
+    function start()
+    {
+      getrequest();
+    }
+    
+    function getrequest()
+    {   
+      console.log("GET");
+      $.ajax({
+        type: "GET",
+        url: connect + document.getElementById('idGET').value,
+        success: function(msg){
+          console.log(msg);
+          console.log(msg.data);
+          var i = 0;
+          document.getElementById('table').innerHTML = "";
+          while (true)
+          {
+            try
+            {
+              var tr = document.createElement("tr");
+              var did = document.createElement("th");
+              did.innerHTML = msg.data[i].id;
+              tr.appendChild(did);
+              var td = document.createElement("td");
+              td.innerHTML = msg.data[i].name;
+              tr.appendChild(td);
+              td = document.createElement("td");
+              td.innerHTML = msg.data[i].line;
+              tr.appendChild(td);
+              td = document.createElement("td");
+              td.innerHTML = msg.data[i].color;
+              tr.appendChild(td);
+              td = document.createElement("td");
+              td.innerHTML = msg.data[i].city;
+              tr.appendChild(td);
+              td = document.createElement("td");
+               td.innerHTML=msg.data[i].comment;
+              tr.appendChild(td);
+              document.getElementById('table').appendChild(tr);
+              i++;
+            }
+            catch
+            {
+              break;
+            }
+          }
+        }
+      });
+    }
+    
+    function postrequest()
+    {
+      console.log("POST");
+      if(document.getElementById('idPOST').value == "")
+      {
+        document.getElementById('idPOST').classList.add("is-invalid");
+        return;
+      }
+      else
+      {
+        document.getElementById('idPOST').classList.remove("is-invalid");
+      }
+      var id = parseInt(document.getElementById('idPOST').value);
+      $.ajax({
+        type: "POST",
+        url: connect,
+        
+        data: "id="+ id +"&name=" + document.getElementById('namePOST').value + "&line=" + document.getElementById('linePOST').value + "&color="+ document.getElementById('colorPOST').value + "&city=" + document.getElementById('cityPOST').value  + "&comment=" + document.getElementById('commentPOST').value,
+        success: function(msg){
+          console.log(msg);
+          getrequest();
+        }
+      });
+    }
+    
+    function putrequest()
+    {
+      console.log("PUT");
+      if(document.getElementById('idPUT').value == "")
+      {
+        document.getElementById('idPUT').classList.add("is-invalid");
+        return;
+      }
+      else
+      {
+        document.getElementById('idPUT').classList.remove("is-invalid");
+      }
+      var id = parseInt(document.getElementById('idPUT').value);
+      $.ajax({
+        type: "PUT",
+        url: connect + id,
+        
+        data: "id="+ id +"&name=" + document.getElementById('namePUT').value + "&line=" + document.getElementById('linePUT').value + "&color="+ document.getElementById('colorPUT').value + "&city=" + document.getElementById('cityPUT').value + "&comment=" + document.getElementById('commentPUT').value,
+        success: function(msg){
+          console.log(msg);
+          getrequest();
+        }
+      });
+    }
+    
+    function deleterequest()
+    {
+      console.log("DELETE");
+      $.ajax({
+        type: "DELETE",
+        url: connect + document.getElementById('idDELETE').value,
+        success: function(msg){
+          console.log(msg);
+          getrequest();
+        }
+      });
+    }
+    
+    function methodChanged()
+    {
+      switch(document.getElementById('methods').value)
+      {
+        case '1':
+          document.getElementById('formGet').style.display = "inline";
+          document.getElementById('formPost').style.display = "none";
+          document.getElementById('formPut').style.display = "none";
+          document.getElementById('formDelete').style.display = "none";
+          break;
+        case '2':
+          document.getElementById('formGet').style.display = "none";
+          document.getElementById('formPost').style.display = "inline";
+          document.getElementById('formPut').style.display = "none";
+          document.getElementById('formDelete').style.display = "none";
+          break;
+        case '3':
+          document.getElementById('formGet').style.display = "none";
+          document.getElementById('formPost').style.display = "none";
+          document.getElementById('formPut').style.display = "inline";
+          document.getElementById('formDelete').style.display = "none";
+          break;
+        case '4':
+          document.getElementById('formGet').style.display = "none";
+          document.getElementById('formPost').style.display = "none";
+          document.getElementById('formPut').style.display = "none";
+          document.getElementById('formDelete').style.display = "inline";
+          break;
+        default:
+          document.getElementById('formGet').style.display = "inline";
+          document.getElementById('formPost').style.display = "none";
+          document.getElementById('formPut').style.display = "none";
+          document.getElementById('formDelete').style.display = "none";
+          break;
+      }
+    }</script>
+	<style>
+		.card
+		{
+			background-color: rgb(170, 98, 98);
+		}
+		.centered {
+  display: grid;
+  
+  justify-content: center;
+  width: 400px;
+}
+	</style>
+</head>
+<body style=" background-image: url(https://typical-moscow.ru/wp-content/uploads/2016/04/metro_subway_moscow_1920x1200__2560x1600_knowledgehi.com_.jpg); background-size: 100%; background-position: top;
+margin: auto;"class="body" onload="getrequest()">
+
+<div class="div centered" style="margin: 10px auto">
+<img src = "http://www.4androidapk.com/data/programs/images/metro-moscow-st-petersburg_21819.png" 
+height = 400px width = 450px>
+</div>
+
+<div  class="div centered" style="margin: -300px auto ; border-radius: 100px " >
+	<div class="input-group mb-3" >
+    <label class="input-group-text" for="inputGroupSelect01">Запросы</label>
+    <select class="form-select" id="methods" onchange="methodChanged()">
+      <option selected value="1">Поиск</option>
+      <option value="2">Добавление</option>
+      <option value="3">Изменение</option>
+      <option value="4">Удаление</option>
+    </select>
+    </div>
+    <div id="formGet">
+    <div class="form-floating mb-3">
+      <input type="number" class="form-control" id="idGET" placeholder="1">
+      <label for="idGET">Код</label>
+    </div>
+    <div class="form-floating mb-3" style="text-align: center;">
+      <button class="btn " style="text-align: center; color: white; margin: 60px auto; background: #FF0000;"  onclick="getrequest()">Найти</button>
+    </div>
+  </div>
+ <div id="formPost" style="display: none;">
+    <div class="form-floating mb-3 required">
+      <input type="number" class="form-control " id="idPOST" placeholder="1">
+      <label for="idPOST">Код</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="namePOST" placeholder="1">
+      <label for="namePOST">Название</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="linePOST" placeholder="1">
+      <label for="linePOST">Линия</label>
+    </div>
+    <div class="input-group mb-3">
+      <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="colorPOST" placeholder="1">
+      <label for="colorPOST">Цвет</label>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="cityPOST" placeholder="1">
+      <label for="cityPOST">Город</label>
+      </div>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="commentPOST" placeholder="1">
+      <label for="commentPOST">Комментарий</label>
+    </div>
+    <div class="form-floating mb-3" style="text-align: center;">
+      <button class="btn " " style="text-align: center; color: white; background: #FF0000;" onclick="postrequest()">Добавить</button>
+    </div>
+  </div>
+
+  <div id="formPut" style="display: none;">
+    <div class="form-floating mb-3">
+      <input type="number" class="form-control " id="idPUT" placeholder="1">
+      <label for="idPUT">Код</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="namePUT" placeholder="1">
+      <label for="namePUT">Имя</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="linePUT" placeholder="1">
+      <label for="linePUT">Линия</label>
+    </div>
+    <div class="input-group mb-3">
+      <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="colorPUT" placeholder="1">
+      <label for="colorPOST">Цвет</label>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="cityPUT" placeholder="1">
+      <label for="cityPOST">Город</label>
+      </div>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="commentPUT" placeholder="1">
+      <label for="commentPUT">Комментарий</label>
+    </div>
+    <div class="form-floating mb-3" style="text-align: center;">
+      <button class="btn " style="text-align: center; color: white; background: #FF0000;" onclick="putrequest()">Изменить</button>
+    </div>
+  </div>
+
+  <div id="formDelete" style="display: none;">
+    <div class="form-floating mb-3">
+      <input type="number" class="form-control" id="idDELETE" placeholder="1">
+      <label for="idGET">Код</label>
+    </div>
+    <div class="form-floating mb-3" style="text-align: center;">
+      <button class="btn " style="text-align: center; color: white; background: #FF0000;" onclick="deleterequest()">Удалить</button>
+    </div>
+  </div>
+     
+</div>  
+
+<div style="margin: 350px auto;  text-shadow: red 1px 1px 0, red -1px -1px 0, 
+                 red -1px 1px 0, red 1px -1px 0;">
+  <table class="table " style = "color: #FFFFFF;">
+    <thead>
+      <tr>
+        <th scope="col">Код</th>
+        <th scope="col">Название</th>
+        <th scope="col">Линия</th>
+        <th scope="col">Цвет</th>
+        <th scope="col">Город</th>
+        <th scope="col">Комментарий</th>
+      </tr>
+    </thead>
+    <tbody id="table" >
+      
+    </tbody>
+  </table>
+  </div> 
+</body>
+</html>
